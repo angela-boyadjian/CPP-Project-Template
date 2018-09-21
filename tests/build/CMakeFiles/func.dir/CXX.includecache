@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../../include/Skat.hpp
+string
+-
+
+/home/lqtv7172/Documents/CPP_Pool/Day07_a/ex00/srcs/Skat.cpp
+iostream
+-
+Skat.hpp
+/home/lqtv7172/Documents/CPP_Pool/Day07_a/ex00/srcs/Skat.hpp
+

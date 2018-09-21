@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfunc.a  CMakeFiles/func.dir/home/lqtv7172/Documents/CPP_Pool/Day07_a/ex00/srcs/Skat.cpp.o
+/usr/bin/ranlib libfunc.a

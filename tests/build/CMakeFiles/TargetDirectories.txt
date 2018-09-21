@@ -1,0 +1,4 @@
+/home/lqtv7172/Documents/CPP_Pool/Day07_a/ex00/tests/build/CMakeFiles/edit_cache.dir
+/home/lqtv7172/Documents/CPP_Pool/Day07_a/ex00/tests/build/CMakeFiles/tests.dir
+/home/lqtv7172/Documents/CPP_Pool/Day07_a/ex00/tests/build/CMakeFiles/rebuild_cache.dir
+/home/lqtv7172/Documents/CPP_Pool/Day07_a/ex00/tests/build/CMakeFiles/func.dir
