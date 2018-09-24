@@ -16,12 +16,15 @@ public:
 private:
 	void createProjectDir();
 	void createSubDir();
+	void generateCmake();
 	void createFiles();
 	void addFileContent(std::string const &, bool);
 	void getProjectName();
 	void getFileName();
+	void getBinaryName();
 	std::string _projectName;
 	std::string _filename;
+	std::string _binaryName;
 };
 
 #endif /* !APPLICATION_HPP_ */

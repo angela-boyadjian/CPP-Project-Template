@@ -37,6 +37,8 @@ void Application::runApp()
 	createSubDir();
 	getFileName();
 	createFiles();
+	getBinaryName();
+	generateCmake();
 }
 
 //
@@ -69,13 +71,29 @@ void Application::createFiles()
 		<< "\n** File description:\n** main" << "\n*/\n\n";
 	file << "#include \"" << _filename << ".hpp\"\n\n"
 		<<"int main(int ac, char **av)\n{\n\t\n\treturn 0;\n}";
+	file.close();
 	path.clear();
 	path = _projectName + "/srcs/" + _filename + ".cpp";
-	file.close();
 	addFileContent(path, false);
 	path.clear();
 	path = _projectName + "/include/" + _filename + ".hpp";
 	addFileContent(path, true);
+}
+
+void Application::generateCmake()
+{
+	std::string path = _projectName + "/CMakeLists.txt";
+	std::fstream file(path, std::ios::out | std::ios::app);
+
+	file << "cmake_minimum_required(VERSION 3.0)\n\nproject("
+		<< _binaryName << ")\n\nadd_definitions(\"-std=c++11\")\n\n"
+		<< "set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)\n\n"
+		<< "set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})\n"
+		<< "set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})\n"
+		<< "include_directories(include)\n\n" << "add_executable(${PROJECT_NAME}\n"
+		<< "\tsrcs/main.cpp\n\tsrcs/" << _filename << ".cpp\n"
+		<< "\tinclude/" << _filename << ".hpp\n)\n\n"
+		<< "target_link_libraries(${PROJECT_NAME} stdc++fs)";
 }
 
 //
@@ -97,6 +115,15 @@ void Application::getFileName()
 	std::cout << "File name: ";
 	std::getline(std::cin, input);
 	_filename = input;
+}
+
+void Application::getBinaryName()
+{
+	std::string input;
+
+	std::cout << "Binary name: ";
+	std::getline(std::cin, input);
+	_binaryName = input;
 }
 
 //
