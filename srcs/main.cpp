@@ -11,8 +11,8 @@
 
 int main(int argc, char const *argv[])
 {
-	Application *app = new Application;
+	Application app;
 
-	app->runApp();
+	app.runApp();
 	return 0;
 }
