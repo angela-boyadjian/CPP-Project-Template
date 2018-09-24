@@ -10,8 +10,6 @@
 
 class Application {
 public:
-	Application();
-	~Application();
 	void runApp();
 private:
 	void createProjectDir();

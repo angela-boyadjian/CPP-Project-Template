@@ -21,13 +21,6 @@ namespace fs = std::experimental::filesystem;
 //   :::::: C L A S S :   A P P L I C A T I O N : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────────────────────────────────
 //
-Application::Application()
-{
-}
-
-Application::~Application()
-{
-}
 
 //
 // ─── RUN ────────────────────────────────────────────────────────────────────────
