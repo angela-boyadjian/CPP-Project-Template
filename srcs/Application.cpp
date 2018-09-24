@@ -48,7 +48,7 @@ void Application::runApp()
 		generateCmakeTest();
 		sleep(1);
 	}
-	std::cout << "\033[1;30;32m--- DONE ---" << std::endl;
+	std::cout << "\033[1;30;32m--- DONE ---\033[0m" << std::endl;
 }
 
 //
@@ -58,6 +58,10 @@ void Application::createProjectDir()
 {
 	if (!fs::is_directory(_projectName) or !fs::exists(_projectName))
 		fs::create_directory(_projectName);
+	else {
+		std::cerr << "\033[1;31mFAILURE: Directory already exists.\033[0m\n";
+		exit(EXIT_FAILURE);
+	}
 }
 
 void Application::createSubDir()
@@ -153,7 +157,7 @@ void Application::copyCatch()
 	if (fs::exists(path))
 		fs::copy(path, _projectName + "/catch");
 	else
-		std::cerr << "\033[1;34mError: catch directory not found.\033[0m\n";
+		std::cerr << "\033[1;31mFAILURE: catch directory not found.\033[0m\n";
 }
 
 //
@@ -220,3 +224,7 @@ void Application::addFileContent(std::string const &path, bool isHeader)
 	}
 	file.close();
 }
+
+//
+// ─── ERROR HANDLING ─────────────────────────────────────────────────────────────
+//
