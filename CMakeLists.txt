@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(myexec)
+project(app)
 
 add_definitions("-std=c++11")
 

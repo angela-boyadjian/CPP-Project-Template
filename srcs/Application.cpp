@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include <experimental/filesystem>
+#include <algorithm>
 
 #include "Application.hpp"
 
@@ -64,17 +65,17 @@ void Application::createFiles()
 	std::string path = _projectName + "/srcs/main.cpp";
 
 	std::fstream file(path, std::ios::out | std::ios::app);
+	file << "/*\n** EPITECH PROJECT, 2018\n** " << _projectName
+		<< "\n** File description:\n** main" << "\n*/\n\n";
+	file << "#include \"" << _filename << ".hpp\"\n\n"
+		<<"int main(int ac, char **av)\n{\n\t\n\treturn 0;\n}";
 	path.clear();
 	path = _projectName + "/srcs/" + _filename + ".cpp";
 	file.close();
-	std::fstream file2(path, std::ios::out | std::ios::app);
-	file2 << "<!--XML Document-->\n";
-	file2 << "<?xml version='1.0'?>\n\n";
-	file.close();
-}
-
-void Application::createHeaderFiles()
-{
+	addFileContent(path, false);
+	path.clear();
+	path = _projectName + "/include/" + _filename + ".hpp";
+	addFileContent(path, true);
 }
 
 //
@@ -96,4 +97,28 @@ void Application::getFileName()
 	std::cout << "File name: ";
 	std::getline(std::cin, input);
 	_filename = input;
+}
+
+//
+// ─── ADD CONTENT TO FILE ────────────────────────────────────────────────────────
+//
+void Application::addFileContent(std::string const &path, bool isHeader)
+{
+	std::fstream file(path, std::ios::out | std::ios::app);
+
+	file << "/*\n** EPITECH PROJECT, 2018\n** " << _projectName
+		<< "\n** File description:\n** " << _filename << "\n*/\n\n";
+
+	if (!isHeader) {
+		file << "#include \"" << _filename << ".hpp\"\n\n";
+		file << _filename << "::" << _filename << "()\n{\n}\n\n";
+		file << _filename << "::" << "~" << _filename << "()\n{\n}\n";
+	} else {
+		std::string s = _filename;
+		transform(s.begin(), s.end(), s.begin(), toupper);
+		file << "#ifndef " << s << "_HPP\n#define " << s << "_HPP\n\nclass "
+		<< _filename << " {\npublic:\n\t" << _filename << "();\n\t~"
+		<< _filename << "();\nprotected:\nprivate:\n};\n\n" << "#endif /* !" << s << "_HPP_ */";
+	}
+	file.close();
 }

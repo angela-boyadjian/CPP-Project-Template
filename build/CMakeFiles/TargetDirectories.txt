@@ -1,3 +1,3 @@
 /home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles/rebuild_cache.dir
-/home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles/myexec.dir
+/home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles/app.dir
 /home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles/edit_cache.dir

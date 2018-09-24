@@ -17,7 +17,7 @@ private:
 	void createProjectDir();
 	void createSubDir();
 	void createFiles();
-	void createHeaderFiles();
+	void addFileContent(std::string const &, bool);
 	void getProjectName();
 	void getFileName();
 	std::string _projectName;
