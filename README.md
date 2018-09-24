@@ -1,5 +1,5 @@
 # CPP-Project-Template
-A template for a simple CMake-based C++ project
+A template for a simple CMake-based C / C++ Epitech project. Let's you choose if you want a C or a C++ project and wether you want a Makefile or a CMakeList.txt.
 
 ## HOW TO USE
 
