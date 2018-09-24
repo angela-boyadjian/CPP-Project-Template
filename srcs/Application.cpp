@@ -242,6 +242,9 @@ void Application::getProjectName()
 
 	std::cout << "\033[1;30;33mProject name: \033[0m";
 	std::getline(std::cin, input);
+
+	if (input.empty())
+		printNoInputErrorMsg();
 	_projectName = input;
 }
 
@@ -251,6 +254,8 @@ void Application::getFileName()
 
 	std::cout << "\033[1;30;36mFile name: \033[0m";
 	std::getline(std::cin, input);
+	if (input.empty())
+		printNoInputErrorMsg();
 	_filename = input;
 }
 
@@ -260,6 +265,8 @@ void Application::getBinaryName()
 
 	std::cout << "\033[1;30;35mBinary name: \033[0m";
 	std::getline(std::cin, input);
+	if (input.empty())
+		printNoInputErrorMsg();
 	_binaryName = input;
 }
 
@@ -269,6 +276,8 @@ bool Application::getUTInfo()
 
 	std::cout << "\033[1;30;34mDo you use Catch for UT ? (y, n): \033[0m";
 	std::getline(std::cin, input);
+	if (input.empty())
+		printNoInputErrorMsg();
 	if (input[0] == 'y')
 		return true;
 	return false;
@@ -280,6 +289,8 @@ bool Application::getProjectType()
 
 	std::cout << "\033[1;30;35mIs your project in C or C++ ? (c, c++): \033[0m";
 	std::getline(std::cin, input);
+	if (input.empty())
+		printNoInputErrorMsg();
 	if (input[0] == 'c' and input[1] != '+')
 		return true;
 	return false;
@@ -291,6 +302,8 @@ bool Application::getCmakeInfo()
 
 	std::cout << "\033[1;30;33mDo you prefer a Cmake or a Makefile ? (c, m): \033[0m";
 	std::getline(std::cin, input);
+	if (input.empty())
+		printNoInputErrorMsg();
 	if (input[0] == 'c')
 		return true;
 	return false;
@@ -336,4 +349,13 @@ void Application::addFileContentC(std::string const &path, bool isHeader)
 		<< "#endif /* !" << s << "_HPP_ */";
 	}
 	file.close();
+}
+
+//
+// ─── ERROR HANDLING ─────────────────────────────────────────────────────────────
+//
+void Application::printNoInputErrorMsg()
+{
+	std::cerr << "\033[1;31mFAILURE: No user input.\033[0m\n";
+	exit(EXIT_FAILURE);
 }

@@ -16,6 +16,7 @@ public:
 private:
 	void createProjectDir();
 	void createSubDir(bool);
+	void printNoInputErrorMsg();
 	void createTestFile();
 	void generateCmakeTest();
 	void generateCmake();
