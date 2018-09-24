@@ -10,6 +10,8 @@
 #include <fstream>
 #include <experimental/filesystem>
 #include <algorithm>
+#include "unistd.h"
+#include <stdlib.h>
 
 #include "Application.hpp"
 
@@ -39,6 +41,14 @@ void Application::runApp()
 	createFiles();
 	getBinaryName();
 	generateCmake();
+	if (getUTInfo()) {
+		std::cout << "\033[1;30;34m...Initializing Unit Tests... \033[0m" << std::endl;
+		copyCatch();
+		createTestFile();
+		generateCmakeTest();
+		sleep(1);
+	}
+	std::cout << "\033[1;30;32m--- DONE ---" << std::endl;
 }
 
 //
@@ -60,6 +70,9 @@ void Application::createSubDir()
 	path.clear();
 	path = _projectName + "/tests";
 	fs::create_directory(path);
+	path.clear();
+	path = _projectName + "/catch";
+	fs::create_directory(path);
 }
 
 void Application::createFiles()
@@ -80,6 +93,21 @@ void Application::createFiles()
 	addFileContent(path, true);
 }
 
+void Application::createTestFile()
+{
+	std::string path = _projectName + "/tests/test.cpp";
+	std::fstream file(path, std::ios::out | std::ios::app);
+
+	file << "#define CATCH_CONFIG_MAIN\n#include \"catch.hpp\"\n"
+		<< "#include \"../srcs/" << _filename << ".cpp\"\n#include <iostream>\n\n"
+		<< "// Example (not working)\n\n" << "TEST_CASE(\""
+		<< _filename << " getters\", \"test1\") {\n\t" << _filename
+		<< " obj(\"Lama\", 3);\n\n\tREQUIRE(obj.function() == 3);\n\t"
+		<< "REQUIRE(obj.function(5) == 5);\n\t"
+		<< "REQUIRE(obj.function() == \"lama\");\n}";
+	file.close();
+}
+
 void Application::generateCmake()
 {
 	std::string path = _projectName + "/CMakeLists.txt";
@@ -96,6 +124,38 @@ void Application::generateCmake()
 		<< "target_link_libraries(${PROJECT_NAME} stdc++fs)";
 }
 
+void Application::generateCmakeTest()
+{
+	std::string path = _projectName + "/tests/CMakeLists.txt";
+	std::fstream file(path, std::ios::out | std::ios::app);
+
+	file << "cmake_minimum_required(VERSION 3.0)\n\nproject(cmake_test"
+		<< ")\n\n# Prepare \"Catch\" library for other executables\n"
+		<< "set(CATCH_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../catch)\n"
+		<< "add_library(Catch INTERFACE)\n"
+		<< "target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})\n\n"
+		<< "# Make test executable\n"
+		<< "include_directories(../include)\n\n" << "add_library(func\n"
+		<< "\t../srcs/" << _filename << ".cpp\n"
+		<< "\tinclude/" << _filename << ".hpp\n)\n\n"
+		<< "set(TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test.cpp)\n"
+		<< "add_executable(tests ${TEST_SOURCES})\n"
+		<< "target_link_libraries(tests Catch)";
+}
+
+void Application::copyCatch()
+{
+	char *log = getlogin();
+
+	std::string buff(log);
+	std::string path = "/home/" + buff + "/Documents/save/catch";
+
+	if (fs::exists(path))
+		fs::copy(path, _projectName + "/catch");
+	else
+		std::cerr << "\033[1;34mError: catch directory not found.\033[0m\n";
+}
+
 //
 // ─── GET INFO FROM USER ─────────────────────────────────────────────────────────
 //
@@ -103,7 +163,7 @@ void Application::getProjectName()
 {
 	std::string input;
 
-	std::cout << "Project name: ";
+	std::cout << "\033[1;30;33mProject name: \033[0m";
 	std::getline(std::cin, input);
 	_projectName = input;
 }
@@ -112,7 +172,7 @@ void Application::getFileName()
 {
 	std::string input;
 
-	std::cout << "File name: ";
+	std::cout << "\033[1;30;36mFile name: \033[0m";
 	std::getline(std::cin, input);
 	_filename = input;
 }
@@ -121,9 +181,20 @@ void Application::getBinaryName()
 {
 	std::string input;
 
-	std::cout << "Binary name: ";
+	std::cout << "\033[1;30;35mBinary name: \033[0m";
 	std::getline(std::cin, input);
 	_binaryName = input;
+}
+
+bool Application::getUTInfo()
+{
+	std::string input;
+
+	std::cout << "\033[1;30;33mDo you use Catch for UT ? (y, n): \033[0m";
+	std::getline(std::cin, input);
+	if (input[0] == 'y')
+		return true;
+	return false;
 }
 
 //
@@ -139,7 +210,7 @@ void Application::addFileContent(std::string const &path, bool isHeader)
 	if (!isHeader) {
 		file << "#include \"" << _filename << ".hpp\"\n\n";
 		file << _filename << "::" << _filename << "()\n{\n}\n\n";
-		file << _filename << "::" << "~" << _filename << "()\n{\n}\n";
+		file << _filename << "::" << "~" << _filename << "()\n{\n}";
 	} else {
 		std::string s = _filename;
 		transform(s.begin(), s.end(), s.begin(), toupper);

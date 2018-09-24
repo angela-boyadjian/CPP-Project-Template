@@ -16,12 +16,16 @@ public:
 private:
 	void createProjectDir();
 	void createSubDir();
+	void createTestFile();
+	void generateCmakeTest();
 	void generateCmake();
 	void createFiles();
 	void addFileContent(std::string const &, bool);
 	void getProjectName();
 	void getFileName();
 	void getBinaryName();
+	bool getUTInfo();
+	void copyCatch();
 	std::string _projectName;
 	std::string _filename;
 	std::string _binaryName;
