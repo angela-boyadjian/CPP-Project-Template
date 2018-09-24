@@ -34,19 +34,34 @@ Application::~Application()
 //
 void Application::runApp()
 {
-	getProjectName();
-	createProjectDir();
-	createSubDir();
-	getFileName();
-	createFiles();
-	getBinaryName();
-	generateCmake();
-	if (getUTInfo()) {
-		std::cout << "\033[1;30;34m...Initializing Unit Tests... \033[0m" << std::endl;
-		copyCatch();
-		createTestFile();
-		generateCmakeTest();
+	if (getProjectType()) {
+		getProjectName();
+		createProjectDir();
+		createSubDir(true);
+		getFileName();
+		createFilesC();
+		getBinaryName();
+		generateMakefile();
+		std::cout << "\033[1;30;34m...Generating Makefile... \033[0m" << std::endl;
 		sleep(1);
+	} else {
+		getProjectName();
+		createProjectDir();
+		createSubDir(false);
+		getFileName();
+		createFiles();
+		getBinaryName();
+		if (getCmakeInfo())
+			generateCmake();
+		else
+			generateMakefileCPP();
+		if (getUTInfo()) {
+			std::cout << "\033[1;30;34m...Initializing Unit Tests... \033[0m" << std::endl;
+			copyCatch();
+			createTestFile();
+			generateCmakeTest();
+			sleep(1);
+		}
 	}
 	std::cout << "\033[1;30;32m--- DONE ---\033[0m" << std::endl;
 }
@@ -64,7 +79,7 @@ void Application::createProjectDir()
 	}
 }
 
-void Application::createSubDir()
+void Application::createSubDir(bool isC)
 {
 	std::string path = _projectName + "/srcs";
 	fs::create_directory(path);
@@ -75,8 +90,10 @@ void Application::createSubDir()
 	path = _projectName + "/tests";
 	fs::create_directory(path);
 	path.clear();
-	path = _projectName + "/catch";
-	fs::create_directory(path);
+	if (!isC) {
+		path = _projectName + "/catch";
+		fs::create_directory(path);
+	}
 }
 
 void Application::createFiles()
@@ -95,6 +112,24 @@ void Application::createFiles()
 	path.clear();
 	path = _projectName + "/include/" + _filename + ".hpp";
 	addFileContent(path, true);
+}
+
+void Application::createFilesC()
+{
+	std::string path = _projectName + "/srcs/main.c";
+
+	std::fstream file(path, std::ios::out | std::ios::app);
+	file << "/*\n** EPITECH PROJECT, 2018\n** " << _projectName
+		<< "\n** File description:\n** main" << "\n*/\n\n";
+	file << "#include \"" << _filename << ".h\"\n\n"
+		<<"int main(int ac, char **av)\n{\n\t\n\treturn 0;\n}";
+	file.close();
+	path.clear();
+	path = _projectName + "/srcs/" + _filename + ".c";
+	addFileContentC(path, false);
+	path.clear();
+	path = _projectName + "/include/" + _filename + ".h";
+	addFileContentC(path, true);
 }
 
 void Application::createTestFile()
@@ -147,6 +182,44 @@ void Application::generateCmakeTest()
 		<< "target_link_libraries(tests Catch)";
 }
 
+void Application::generateMakefile()
+{
+	std::string path = _projectName + "/Makefile";
+	std::fstream file(path, std::ios::out | std::ios::app);
+
+	file << "##\n## EPITECH PROJECT, 2018\n## " << _projectName
+		<< "\n## File description:\n## Makefile\n##\n\n"
+		<< "CC\t=\tgcc\n\nCFLAGS\t+=\t-Wall -Wextra -Werror\n\n"
+		<< "CPPFLAGS\t+=\t-I./include\n\nNAME\t=\t" << _binaryName
+		<< "\n\nDIR\t=\tsrcs/\n\nSRCS\t=\t$(DIR)main.c\t\\\n"
+		<< "\t\t\t$(DIR)" << _filename << ".c\n\n"
+		<< "OBJS\t=\t$(SRCS:.c=.o)\n\n"
+		<< "all: $(NAME) $(VERSION_FLAGS)\n\n"
+		<< "$(NAME): $(OBJS)\n\t$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)\n\n"
+		<< "clean:\n\trm $(OBJS)\n\n"
+		<< "fclean:\tclean\n\trm $(NAME)\n\nre:\tfclean all\n\n"
+		<< ".PHONY:	all exec clean fclean re";
+}
+
+void Application::generateMakefileCPP()
+{
+	std::string path = _projectName + "/Makefile";
+	std::fstream file(path, std::ios::out | std::ios::app);
+
+	file << "##\n## EPITECH PROJECT, 2018\n## " << _projectName
+		<< "\n## File description:\n## Makefile\n##\n\n"
+		<< "CC\t=\tg++\n\nCFLAGS\t+=\t-Wall -Wextra -Werror -std=c++14\n\n"
+		<< "CPPFLAGS\t+=\t-I./include\n\nNAME\t=\t" << _binaryName
+		<< "\n\nDIR\t=\tsrcs/\n\nSRCS\t=\t$(DIR)main.cpp\t\\\n"
+		<< "\t\t\t$(DIR)" << _filename << ".cpp\n\n"
+		<< "OBJS\t=\t$(SRCS:.cpp=.o)\n\n"
+		<< "all: $(NAME) $(VERSION_FLAGS)\n\n"
+		<< "$(NAME): $(OBJS)\n\t$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)\n\n"
+		<< "clean:\n\trm $(OBJS)\n\n"
+		<< "fclean:\tclean\n\trm $(NAME)\n\nre:\tfclean all\n\n"
+		<< ".PHONY:	all exec clean fclean re";
+}
+
 void Application::copyCatch()
 {
 	char *log = getlogin();
@@ -194,9 +267,31 @@ bool Application::getUTInfo()
 {
 	std::string input;
 
-	std::cout << "\033[1;30;33mDo you use Catch for UT ? (y, n): \033[0m";
+	std::cout << "\033[1;30;34mDo you use Catch for UT ? (y, n): \033[0m";
 	std::getline(std::cin, input);
 	if (input[0] == 'y')
+		return true;
+	return false;
+}
+
+bool Application::getProjectType()
+{
+	std::string input;
+
+	std::cout << "\033[1;30;35mIs your project in C or C++ ? (c, c++): \033[0m";
+	std::getline(std::cin, input);
+	if (input[0] == 'c' and input[1] != '+')
+		return true;
+	return false;
+}
+
+bool Application::getCmakeInfo()
+{
+	std::string input;
+
+	std::cout << "\033[1;30;33mDo you prefer a Cmake or a Makefile ? (c, m): \033[0m";
+	std::getline(std::cin, input);
+	if (input[0] == 'c')
 		return true;
 	return false;
 }
@@ -225,6 +320,20 @@ void Application::addFileContent(std::string const &path, bool isHeader)
 	file.close();
 }
 
-//
-// ─── ERROR HANDLING ─────────────────────────────────────────────────────────────
-//
+void Application::addFileContentC(std::string const &path, bool isHeader)
+{
+	std::fstream file(path, std::ios::out | std::ios::app);
+
+	file << "/*\n** EPITECH PROJECT, 2018\n** " << _projectName
+		<< "\n** File description:\n** " << _filename << "\n*/\n\n";
+
+	if (!isHeader) {
+		file << "#include \"" << _filename << ".h\"\n\n";
+	} else {
+		std::string s = _filename;
+		transform(s.begin(), s.end(), s.begin(), toupper);
+		file << "#ifndef " << s << "_H\n#define " << s << "_H\n\n"
+		<< "#endif /* !" << s << "_HPP_ */";
+	}
+	file.close();
+}

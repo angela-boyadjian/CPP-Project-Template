@@ -15,16 +15,22 @@ public:
 	void runApp();
 private:
 	void createProjectDir();
-	void createSubDir();
+	void createSubDir(bool);
 	void createTestFile();
 	void generateCmakeTest();
 	void generateCmake();
+	void generateMakefile();
+	void generateMakefileCPP();
 	void createFiles();
 	void addFileContent(std::string const &, bool);
+	void addFileContentC(std::string const &, bool);
 	void getProjectName();
+	bool getProjectType();
+	void createFilesC();
 	void getFileName();
 	void getBinaryName();
 	bool getUTInfo();
+	bool getCmakeInfo();
 	void copyCatch();
 	std::string _projectName;
 	std::string _filename;
