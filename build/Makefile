@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named app
+# Target rules for targets named mysetup
 
 # Build rule for target.
-app: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 app
-.PHONY : app
+mysetup: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 mysetup
+.PHONY : mysetup
 
 # fast build rule for target.
-app/fast:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/build
-.PHONY : app/fast
+mysetup/fast:
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/build
+.PHONY : mysetup/fast
 
 srcs/Application.o: srcs/Application.cpp.o
 
@@ -129,7 +129,7 @@ srcs/Application.o: srcs/Application.cpp.o
 
 # target to build an object file
 srcs/Application.cpp.o:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/srcs/Application.cpp.o
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/srcs/Application.cpp.o
 .PHONY : srcs/Application.cpp.o
 
 srcs/Application.i: srcs/Application.cpp.i
@@ -138,7 +138,7 @@ srcs/Application.i: srcs/Application.cpp.i
 
 # target to preprocess a source file
 srcs/Application.cpp.i:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/srcs/Application.cpp.i
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/srcs/Application.cpp.i
 .PHONY : srcs/Application.cpp.i
 
 srcs/Application.s: srcs/Application.cpp.s
@@ -147,7 +147,7 @@ srcs/Application.s: srcs/Application.cpp.s
 
 # target to generate assembly for a file
 srcs/Application.cpp.s:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/srcs/Application.cpp.s
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/srcs/Application.cpp.s
 .PHONY : srcs/Application.cpp.s
 
 srcs/main.o: srcs/main.cpp.o
@@ -156,7 +156,7 @@ srcs/main.o: srcs/main.cpp.o
 
 # target to build an object file
 srcs/main.cpp.o:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/srcs/main.cpp.o
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/srcs/main.cpp.o
 .PHONY : srcs/main.cpp.o
 
 srcs/main.i: srcs/main.cpp.i
@@ -165,7 +165,7 @@ srcs/main.i: srcs/main.cpp.i
 
 # target to preprocess a source file
 srcs/main.cpp.i:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/srcs/main.cpp.i
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/srcs/main.cpp.i
 .PHONY : srcs/main.cpp.i
 
 srcs/main.s: srcs/main.cpp.s
@@ -174,7 +174,7 @@ srcs/main.s: srcs/main.cpp.s
 
 # target to generate assembly for a file
 srcs/main.cpp.s:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/srcs/main.cpp.s
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/srcs/main.cpp.s
 .PHONY : srcs/main.cpp.s
 
 # Help Target
@@ -184,7 +184,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... app"
+	@echo "... mysetup"
 	@echo "... edit_cache"
 	@echo "... srcs/Application.o"
 	@echo "... srcs/Application.i"

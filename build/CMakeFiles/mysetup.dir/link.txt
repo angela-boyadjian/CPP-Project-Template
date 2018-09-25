@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/mysetup.dir/srcs/main.cpp.o CMakeFiles/mysetup.dir/srcs/Application.cpp.o  -o ../bin/mysetup -lstdc++fs 

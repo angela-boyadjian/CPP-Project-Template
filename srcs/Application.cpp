@@ -44,10 +44,15 @@ void Application::runApp()
 		getFileName();
 		createFiles();
 		getBinaryName();
-		if (getCmakeInfo())
+		if (getCmakeInfo()) {
 			generateCmake();
-		else
+			std::cout << "\033[1;30;33m...Generating Cmake... \033[0m" << std::endl;
+			sleep(1);
+		} else {
 			generateMakefileCPP();
+			std::cout << "\033[1;30;33m...Generating Makefile... \033[0m" << std::endl;
+			sleep(1);
+		}
 		if (getUTInfo()) {
 			std::cout << "\033[1;30;34m...Initializing Unit Tests... \033[0m" << std::endl;
 			copyCatch();
@@ -77,7 +82,7 @@ void Application::createSubDir(bool isC)
 	std::string path = _projectName + "/srcs";
 	fs::create_directory(path);
 	path.clear();
-	path = _projectName + "/include";
+	path = _projectName + "/includes";
 	fs::create_directory(path);
 	path.clear();
 	path = _projectName + "/tests";
@@ -97,13 +102,13 @@ void Application::createFiles()
 	file << "/*\n** EPITECH PROJECT, 2018\n** " << _projectName
 		<< "\n** File description:\n** main" << "\n*/\n\n";
 	file << "#include \"" << _filename << ".hpp\"\n\n"
-		<<"int main(int ac, char **av)\n{\n\t\n\treturn 0;\n}";
+		<<"int main(int ac, char **av)\n{\n\t(void)av;\n\t(void)ac;\n\treturn 0;\n}";
 	file.close();
 	path.clear();
 	path = _projectName + "/srcs/" + _filename + ".cpp";
 	addFileContent(path, false);
 	path.clear();
-	path = _projectName + "/include/" + _filename + ".hpp";
+	path = _projectName + "/includes/" + _filename + ".hpp";
 	addFileContent(path, true);
 }
 
@@ -115,13 +120,13 @@ void Application::createFilesC()
 	file << "/*\n** EPITECH PROJECT, 2018\n** " << _projectName
 		<< "\n** File description:\n** main" << "\n*/\n\n";
 	file << "#include \"" << _filename << ".h\"\n\n"
-		<<"int main(int ac, char **av)\n{\n\t\n\treturn 0;\n}";
+		<<"int main(int ac, char **av)\n{\n\t(void)av;\n\t(void)ac;\n\treturn (0);\n}";
 	file.close();
 	path.clear();
 	path = _projectName + "/srcs/" + _filename + ".c";
 	addFileContentC(path, false);
 	path.clear();
-	path = _projectName + "/include/" + _filename + ".h";
+	path = _projectName + "/includes/" + _filename + ".h";
 	addFileContentC(path, true);
 }
 
@@ -182,15 +187,22 @@ void Application::generateMakefile()
 
 	file << "##\n## EPITECH PROJECT, 2018\n## " << _projectName
 		<< "\n## File description:\n## Makefile\n##\n\n"
-		<< "CC\t=\tgcc\n\nCFLAGS\t+=\t-Wall -Wextra -Werror\n\n"
-		<< "CPPFLAGS\t+=\t-I./include\n\nNAME\t=\t" << _binaryName
+		<< "CC\t=\tgcc\n\nCFLAGS\t+=\t-W -Wall -Wextra -Werror\n\n"
+		<< "CFLAGS\t+=\t-I./includes\n\nNAME\t=\t" << _binaryName
 		<< "\n\nDIR\t=\tsrcs/\n\nSRCS\t=\t$(DIR)main.c\t\\\n"
 		<< "\t\t\t$(DIR)" << _filename << ".c\n\n"
-		<< "OBJS\t=\t$(SRCS:.c=.o)\n\n"
-		<< "all: $(NAME) $(VERSION_FLAGS)\n\n"
-		<< "$(NAME): $(OBJS)\n\t$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)\n\n"
-		<< "clean:\n\trm $(OBJS)\n\n"
-		<< "fclean:\tclean\n\trm $(NAME)\n\nre:\tfclean all\n\n"
+		<< "OBJS\t=\t$(SRCS:.c=.o)\n\n%.o: %.c\n"
+		<< "\t\t@printf \"[\\033[0;32mcompiled\\033[0m] % 29s\\n\" $< | tr ' ' '.'\n"
+		<< "\t\t@$(CC) -c -o $@ $< $(CFLAGS) $(LDFLAGS)\n\n"
+		<< "EXEC:\t$(NAME)\n\n"
+		<< "all: EXEC\n\n"
+		<< "$(NAME):\t$(OBJS)\n\t\t@$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)\n"
+		<< "\t\t@printf \"[\\033[0;36mbuilt\\033[0m] % 32s\\n\" $(NAME) | tr ' ' '.'\n\n"
+		<< "clean:\n\t\t@rm $(OBJS)\n"
+		<< "\t\t@printf \"[\\033[0;31mdeleted\\033[0m] % 30s\\n\" $(OBJS) | tr ' ' '.'\n\n"
+		<< "fclean:\tclean\n\t\t@rm $(NAME)\n\t\t"
+		<< "@printf \"[\\033[0;31mdeleted\\033[0m] % 30s\\n\" $(NAME) | tr ' ' '.'\n\n"
+		<< "re:\t\tfclean all\n\n"
 		<< ".PHONY:	all exec clean fclean re";
 }
 
@@ -201,15 +213,22 @@ void Application::generateMakefileCPP()
 
 	file << "##\n## EPITECH PROJECT, 2018\n## " << _projectName
 		<< "\n## File description:\n## Makefile\n##\n\n"
-		<< "CC\t=\tg++\n\nCFLAGS\t+=\t-Wall -Wextra -Werror -std=c++14\n\n"
-		<< "CPPFLAGS\t+=\t-I./include\n\nNAME\t=\t" << _binaryName
+		<< "CC\t=\tg++\n\nCFLAGS\t+=\t-W -Wall -Wextra -Werror -std=c++14\n\n"
+		<< "CFLAGS\t+=\t-I./includes\n\nNAME\t=\t" << _binaryName
 		<< "\n\nDIR\t=\tsrcs/\n\nSRCS\t=\t$(DIR)main.cpp\t\\\n"
 		<< "\t\t\t$(DIR)" << _filename << ".cpp\n\n"
-		<< "OBJS\t=\t$(SRCS:.cpp=.o)\n\n"
-		<< "all: $(NAME) $(VERSION_FLAGS)\n\n"
-		<< "$(NAME): $(OBJS)\n\t$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)\n\n"
-		<< "clean:\n\trm $(OBJS)\n\n"
-		<< "fclean:\tclean\n\trm $(NAME)\n\nre:\tfclean all\n\n"
+		<< "OBJS\t=\t$(SRCS:.cpp=.o)\n\n%.o: %.cpp\n"
+		<< "\t\t@printf \"[\\033[0;32mcompiled\\033[0m] % 29s\\n\" $< | tr ' ' '.'\n"
+		<< "\t\t@$(CC) -c -o $@ $< $(CFLAGS) $(LDFLAGS)\n\n"
+		<< "EXEC:\t$(NAME)\n\n"
+		<< "all: EXEC\n\n"
+		<< "$(NAME):\t$(OBJS)\n\t\t@$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)\n"
+		<< "\t\t@printf \"[\\033[0;36mbuilt\\033[0m] % 32s\\n\" $(NAME) | tr ' ' '.'\n\n"
+		<< "clean:\n\t\t@rm $(OBJS)\n"
+		<< "\t\t@printf \"[\\033[0;31mdeleted\\033[0m] % 30s\\n\" $(OBJS) | tr ' ' '.'\n\n"
+		<< "fclean:\tclean\n\t\t@rm $(NAME)\n\t\t"
+		<< "@printf \"[\\033[0;31mdeleted\\033[0m] % 30s\\n\" $(NAME) | tr ' ' '.'\n\n"
+		<< "re:\t\tfclean all\n\n"
 		<< ".PHONY:	all exec clean fclean re";
 }
 

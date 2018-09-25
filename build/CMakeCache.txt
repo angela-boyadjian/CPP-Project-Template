@@ -130,7 +130,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=app
+CMAKE_PROJECT_NAME:STATIC=mysetup
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -186,6 +186,12 @@ app_BINARY_DIR:STATIC=/home/lqtv7172/Documents/CPP-Project-Template/build
 
 //Value Computed by CMake
 app_SOURCE_DIR:STATIC=/home/lqtv7172/Documents/CPP-Project-Template
+
+//Value Computed by CMake
+mysetup_BINARY_DIR:STATIC=/home/lqtv7172/Documents/CPP-Project-Template/build
+
+//Value Computed by CMake
+mysetup_SOURCE_DIR:STATIC=/home/lqtv7172/Documents/CPP-Project-Template
 
 
 ########################

@@ -60,39 +60,39 @@ CMAKE_SOURCE_DIR = /home/lqtv7172/Documents/CPP-Project-Template
 CMAKE_BINARY_DIR = /home/lqtv7172/Documents/CPP-Project-Template/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/app.dir
+# Target rules for target CMakeFiles/mysetup.dir
 
 # All Build rule for target.
-CMakeFiles/app.dir/all:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/depend
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles --progress-num=1,2,3 "Built target app"
-.PHONY : CMakeFiles/app.dir/all
+CMakeFiles/mysetup.dir/all:
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/depend
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles --progress-num=1,2,3 "Built target mysetup"
+.PHONY : CMakeFiles/mysetup.dir/all
 
 # Include target in all.
-all: CMakeFiles/app.dir/all
+all: CMakeFiles/mysetup.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/app.dir/rule: cmake_check_build_system
+CMakeFiles/mysetup.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/app.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/mysetup.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles 0
-.PHONY : CMakeFiles/app.dir/rule
+.PHONY : CMakeFiles/mysetup.dir/rule
 
 # Convenience name for target.
-app: CMakeFiles/app.dir/rule
+mysetup: CMakeFiles/mysetup.dir/rule
 
-.PHONY : app
-
-# clean rule for target.
-CMakeFiles/app.dir/clean:
-	$(MAKE) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/clean
-.PHONY : CMakeFiles/app.dir/clean
+.PHONY : mysetup
 
 # clean rule for target.
-clean: CMakeFiles/app.dir/clean
+CMakeFiles/mysetup.dir/clean:
+	$(MAKE) -f CMakeFiles/mysetup.dir/build.make CMakeFiles/mysetup.dir/clean
+.PHONY : CMakeFiles/mysetup.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/mysetup.dir/clean
 
 .PHONY : clean
 
