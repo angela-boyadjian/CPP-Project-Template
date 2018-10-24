@@ -151,13 +151,13 @@ void Application::generateCmake()
 	std::fstream file(path, std::ios::out | std::ios::app);
 
 	file << "cmake_minimum_required(VERSION 3.0)\n\nproject("
-		<< _binaryName << ")\n\nadd_definitions(\"-std=c++11\")\n\n"
+		<< _binaryName << ")\n\nadd_definitions(\"-std=c++14\")\n\n"
 		<< "set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)\n\n"
 		<< "set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})\n"
 		<< "set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})\n"
-		<< "include_directories(include)\n\n" << "add_executable(${PROJECT_NAME}\n"
+		<< "include_directories(includes)\n\n" << "add_executable(${PROJECT_NAME}\n"
 		<< "\tsrcs/main.cpp\n\tsrcs/" << _filename << ".cpp\n"
-		<< "\tinclude/" << _filename << ".hpp\n)\n\n"
+		<< "\tincludes/" << _filename << ".hpp\n)\n\n"
 		<< "target_link_libraries(${PROJECT_NAME} stdc++fs)";
 }
 
@@ -172,9 +172,9 @@ void Application::generateCmakeTest()
 		<< "add_library(Catch INTERFACE)\n"
 		<< "target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})\n\n"
 		<< "# Make test executable\n"
-		<< "include_directories(../include)\n\n" << "add_library(func\n"
+		<< "include_directories(../includes)\n\n" << "add_library(func\n"
 		<< "\t../srcs/" << _filename << ".cpp\n"
-		<< "\tinclude/" << _filename << ".hpp\n)\n\n"
+		<< "\tincludes/" << _filename << ".hpp\n)\n\n"
 		<< "set(TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test.cpp)\n"
 		<< "add_executable(tests ${TEST_SOURCES})\n"
 		<< "target_link_libraries(tests Catch)";
