@@ -5,8 +5,9 @@
 ** Application
 */
 
-#ifndef APPLICATION_HPP_
-#define APPLICATION_HPP_
+#pragma once
+
+#include <string>
 
 class Application {
 public:
@@ -16,6 +17,7 @@ private:
 	void createSubDir(bool);
 	void printNoInputErrorMsg();
 	void createTestFile();
+	void createTestFileC();
 	void generateCmakeTest();
 	void generateCmake();
 	void generateMakefile();
@@ -35,5 +37,3 @@ private:
 	std::string _filename;
 	std::string _binaryName;
 };
-
-#endif /* !APPLICATION_HPP_ */

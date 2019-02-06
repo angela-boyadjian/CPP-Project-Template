@@ -1,3 +1,0 @@
-/home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles/rebuild_cache.dir
-/home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles/mysetup.dir
-/home/lqtv7172/Documents/CPP-Project-Template/build/CMakeFiles/edit_cache.dir

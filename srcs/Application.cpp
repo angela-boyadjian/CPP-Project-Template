@@ -37,6 +37,9 @@ void Application::runApp()
 		generateMakefile();
 		std::cout << "\033[1;30;34m...Generating Makefile... \033[0m" << std::endl;
 		sleep(1);
+		std::cout << "\033[1;30;34m...Initializing Unit Tests... \033[0m" << std::endl;
+		createTestFileC();
+		sleep(1);
 	} else {
 		getProjectName();
 		createProjectDir();
@@ -53,13 +56,9 @@ void Application::runApp()
 			std::cout << "\033[1;30;33m...Generating Makefile... \033[0m" << std::endl;
 			sleep(1);
 		}
-		if (getUTInfo()) {
-			std::cout << "\033[1;30;34m...Initializing Unit Tests... \033[0m" << std::endl;
-			copyCatch();
-			createTestFile();
-			generateCmakeTest();
-			sleep(1);
-		}
+		std::cout << "\033[1;30;34m...Initializing Unit Tests... \033[0m" << std::endl;
+		createTestFile();
+		sleep(1);
 	}
 	std::cout << "\033[1;30;32m--- DONE ---\033[0m" << std::endl;
 }
@@ -88,10 +87,6 @@ void Application::createSubDir(bool isC)
 	path = _projectName + "/tests";
 	fs::create_directory(path);
 	path.clear();
-	if (!isC) {
-		path = _projectName + "/catch";
-		fs::create_directory(path);
-	}
 }
 
 void Application::createFiles()
@@ -99,7 +94,7 @@ void Application::createFiles()
 	std::string path = _projectName + "/srcs/main.cpp";
 
 	std::fstream file(path, std::ios::out | std::ios::app);
-	file << "/*\n** EPITECH PROJECT, 2018\n** " << _projectName
+	file << "/*\n** EPITECH PROJECT, 2019\n** " << _projectName
 		<< "\n** File description:\n** main" << "\n*/\n\n";
 	file << "#include \"" << _filename << ".hpp\"\n\n"
 		<<"int main(int ac, char **av)\n{\n\t(void)av;\n\t(void)ac;\n\treturn 0;\n}";
@@ -117,7 +112,7 @@ void Application::createFilesC()
 	std::string path = _projectName + "/srcs/main.c";
 
 	std::fstream file(path, std::ios::out | std::ios::app);
-	file << "/*\n** EPITECH PROJECT, 2018\n** " << _projectName
+	file << "/*\n** EPITECH PROJECT, 2019\n** " << _projectName
 		<< "\n** File description:\n** main" << "\n*/\n\n";
 	file << "#include \"" << _filename << ".h\"\n\n"
 		<<"int main(int ac, char **av)\n{\n\t(void)av;\n\t(void)ac;\n\treturn (0);\n}";
@@ -132,16 +127,31 @@ void Application::createFilesC()
 
 void Application::createTestFile()
 {
-	std::string path = _projectName + "/tests/test.cpp";
+	std::string path = _projectName + "/tests/test-myTest.cpp";
 	std::fstream file(path, std::ios::out | std::ios::app);
 
-	file << "#define CATCH_CONFIG_MAIN\n#include \"catch.hpp\"\n"
-		<< "#include \"../srcs/" << _filename << ".cpp\"\n#include <iostream>\n\n"
-		<< "// Example (not working)\n\n" << "TEST_CASE(\""
-		<< _filename << " getters\", \"test1\") {\n\t" << _filename
-		<< " obj(\"Lama\", 3);\n\n\tREQUIRE(obj.function() == 3);\n\t"
-		<< "REQUIRE(obj.function(5) == 5);\n\t"
-		<< "REQUIRE(obj.function() == \"lama\");\n}";
+	file << "/*\n** EPITECH PROJECT, 2019\n** " << _projectName
+		<< "\n** File description:\n** test" << "\n*/\n\n";
+	file << "#include <criterion/criterion.h>\n#include <criterion/redirect.h>\n\n"
+		<< "void redirect_all_stdout(void)\n{\n\tcr_redirect_stdout();\n\t"
+		<< "cr_redirect_stderr();\n}\n\n//Test not working (example)\n"
+		<< "Test(utils, TestName_v1, .init=redirect_all_stdout)\n{\n\t//call function\n\t"
+		<< "cr_assert_stdout_eq_str(\"String to be equal to\");\n}\n";
+	file.close();
+}
+
+void Application::createTestFileC()
+{
+	std::string path = _projectName + "/tests/test-my_test.c";
+	std::fstream file(path, std::ios::out | std::ios::app);
+
+	file << "/*\n** EPITECH PROJECT, 2019\n** " << _projectName
+		<< "\n** File description:\n** test" << "\n*/\n\n";
+	file << "#include <criterion/criterion.h>\n#include <criterion/redirect.h>\n\n"
+		<< "void redirect_all_stdout(void)\n{\n\tcr_redirect_stdout();\n\t"
+		<< "cr_redirect_stderr();\n}\n\n//Test not working (example)\n"
+		<< "Test(utils, TestName_v1, .init=redirect_all_stdout)\n{\n\t//call function\n\t"
+		<< "cr_assert_stdout_eq_str(\"String to be equal to\");\n}\n";
 	file.close();
 }
 
@@ -185,22 +195,27 @@ void Application::generateMakefile()
 	std::string path = _projectName + "/Makefile";
 	std::fstream file(path, std::ios::out | std::ios::app);
 
-	file << "##\n## EPITECH PROJECT, 2018\n## " << _projectName
+	file << "##\n## EPITECH PROJECT, 2019\n## " << _projectName
 		<< "\n## File description:\n## Makefile\n##\n\n"
-		<< "CC\t=\tgcc\n\nCFLAGS\t+=\t-W -Wall -Wextra -Werror\n\n"
+		<< "CC\t=\tgcc\n\nTEST_CC =   gcc -W -Wall -Wextra -I./includes --coverage -lcriterion\n\n"
+		<< "CFLAGS\t+=\t-W -Wall -Wextra -Werror\n\n"
 		<< "CFLAGS\t+=\t-I./includes\n\nNAME\t=\t" << _binaryName
 		<< "\n\nDIR\t=\tsrcs/\n\nSRCS\t=\t$(DIR)main.c\t\\\n"
 		<< "\t\t\t$(DIR)" << _filename << ".c\n\n"
+		<< "SRCS_UT =\t$(DIR)" << _filename << ".c\n\nUT_DIR  =\ttests/\n\n"
+		<< "SRCS_TESTS =\t$(UT_DIR)test-my_test.c\n\nTEST_NAME	=  unit_tests\n\n"
 		<< "OBJS\t=\t$(SRCS:.c=.o)\n\n%.o: %.c\n"
 		<< "\t\t@printf \"[\\033[0;32mcompiled\\033[0m] % 29s\\n\" $< | tr ' ' '.'\n"
 		<< "\t\t@$(CC) -c -o $@ $< $(CFLAGS) $(LDFLAGS)\n\n"
-		<< "EXEC:\t$(NAME)\n\n"
-		<< "all: EXEC\n\n"
+		<< "all: $(NAME)\n\n"
 		<< "$(NAME):\t$(OBJS)\n\t\t@$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)\n"
 		<< "\t\t@printf \"[\\033[0;36mbuilt\\033[0m] % 32s\\n\" $(NAME) | tr ' ' '.'\n\n"
+		<< "tests_run:	EXEC\n\t./$(TEST_NAME)\n\n"
+		<< "EXEC:\n\t$(TEST_CC) -o $(TEST_NAME) $(SRCS_UT) $(SRCS_TESTS)\n\n"
+		<< "delete_tests:\n\tfind . -type f -name '*.gc*' -delete\n\n"
 		<< "clean:\n\t\t@rm $(OBJS)\n"
 		<< "\t\t@printf \"[\\033[0;31mdeleted\\033[0m] % 30s\\n\" $(OBJS) | tr ' ' '.'\n\n"
-		<< "fclean:\tclean\n\t\t@rm $(NAME)\n\t\t"
+		<< "fclean:\tclean\n\t\t@rm $(NAME)\n\t\t@rm $(TEST_NAME)\n\t\t"
 		<< "@printf \"[\\033[0;31mdeleted\\033[0m] % 30s\\n\" $(NAME) | tr ' ' '.'\n\n"
 		<< "re:\t\tfclean all\n\n"
 		<< ".PHONY:	all exec clean fclean re";
@@ -211,38 +226,30 @@ void Application::generateMakefileCPP()
 	std::string path = _projectName + "/Makefile";
 	std::fstream file(path, std::ios::out | std::ios::app);
 
-	file << "##\n## EPITECH PROJECT, 2018\n## " << _projectName
+	file << "##\n## EPITECH PROJECT, 2019\n## " << _projectName
 		<< "\n## File description:\n## Makefile\n##\n\n"
-		<< "CC\t=\tg++\n\nCFLAGS\t+=\t-W -Wall -Wextra -Werror -std=c++14\n\n"
+		<< "CXX\t=\tg++\n\nTEST_CC =   g++ -W -Wall -Wextra -I./includes --coverage -lcriterion\n\n"
+		<< "CFLAGS\t+=\t-W -Wall -Wextra -Werror -std=c++14\n\n"
 		<< "CFLAGS\t+=\t-I./includes\n\nNAME\t=\t" << _binaryName
 		<< "\n\nDIR\t=\tsrcs/\n\nSRCS\t=\t$(DIR)main.cpp\t\\\n"
 		<< "\t\t\t$(DIR)" << _filename << ".cpp\n\n"
+		<< "SRCS_UT =\t$(DIR)" << _filename << ".cpp\n\nUT_DIR  =\ttests/\n\n"
+		<< "SRCS_TESTS =\t$(UT_DIR)test-myTest.cpp\n\nTEST_NAME	=  unit_tests\n\n"
 		<< "OBJS\t=\t$(SRCS:.cpp=.o)\n\n%.o: %.cpp\n"
 		<< "\t\t@printf \"[\\033[0;32mcompiled\\033[0m] % 29s\\n\" $< | tr ' ' '.'\n"
 		<< "\t\t@$(CC) -c -o $@ $< $(CFLAGS) $(LDFLAGS)\n\n"
-		<< "EXEC:\t$(NAME)\n\n"
-		<< "all: EXEC\n\n"
+		<< "all: $(NAME)\n\n"
 		<< "$(NAME):\t$(OBJS)\n\t\t@$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)\n"
 		<< "\t\t@printf \"[\\033[0;36mbuilt\\033[0m] % 32s\\n\" $(NAME) | tr ' ' '.'\n\n"
+		<< "tests_run:	EXEC\n\t./$(TEST_NAME)\n\n"
+		<< "EXEC:\n\t$(TEST_CC) -o $(TEST_NAME) $(SRCS_UT) $(SRCS_TESTS)\n\n"
+		<< "delete_tests:\n\tfind . -type f -name '*.gc*' -delete\n\n"
 		<< "clean:\n\t\t@rm $(OBJS)\n"
 		<< "\t\t@printf \"[\\033[0;31mdeleted\\033[0m] % 30s\\n\" $(OBJS) | tr ' ' '.'\n\n"
-		<< "fclean:\tclean\n\t\t@rm $(NAME)\n\t\t"
+		<< "fclean:\tclean\n\t\t@rm $(NAME)\n\t\t@rm $(TEST_NAME)\n\t\t"
 		<< "@printf \"[\\033[0;31mdeleted\\033[0m] % 30s\\n\" $(NAME) | tr ' ' '.'\n\n"
 		<< "re:\t\tfclean all\n\n"
 		<< ".PHONY:	all exec clean fclean re";
-}
-
-void Application::copyCatch()
-{
-	char *log = getlogin();
-
-	std::string buff(log);
-	std::string path = "/home/" + buff + "/Documents/save/catch";
-
-	if (fs::exists(path))
-		fs::copy(path, _projectName + "/catch");
-	else
-		std::cerr << "\033[1;31mFAILURE: catch directory not found.\033[0m\n";
 }
 
 //
@@ -280,19 +287,6 @@ void Application::getBinaryName()
 	if (input.empty())
 		printNoInputErrorMsg();
 	_binaryName = input;
-}
-
-bool Application::getUTInfo()
-{
-	std::string input;
-
-	std::cout << "\033[1;30;34mDo you use Catch for UT ? (y, n): \033[0m";
-	std::getline(std::cin, input);
-	if (input.empty())
-		printNoInputErrorMsg();
-	if (input[0] == 'y')
-		return true;
-	return false;
 }
 
 bool Application::getProjectType()
@@ -338,9 +332,9 @@ void Application::addFileContent(std::string const &path, bool isHeader)
 	} else {
 		std::string s = _filename;
 		transform(s.begin(), s.end(), s.begin(), toupper);
-		file << "#ifndef " << s << "_HPP\n#define " << s << "_HPP\n\nclass "
+		file << "#pragma once"<< "\n\nclass "
 		<< _filename << " {\npublic:\n\t" << _filename << "();\n\t~"
-		<< _filename << "();\nprotected:\nprivate:\n};\n\n" << "#endif /* !" << s << "_HPP_ */";
+		<< _filename << "();\nprotected:\nprivate:\n};\n\n";
 	}
 	file.close();
 }
@@ -357,8 +351,7 @@ void Application::addFileContentC(std::string const &path, bool isHeader)
 	} else {
 		std::string s = _filename;
 		transform(s.begin(), s.end(), s.begin(), toupper);
-		file << "#ifndef " << s << "_H\n#define " << s << "_H\n\n"
-		<< "#endif /* !" << s << "_HPP_ */";
+		file << "#pragma once\n\n";
 	}
 	file.close();
 }
