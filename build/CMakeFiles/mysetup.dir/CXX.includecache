@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Application.hpp
+string
+-
+
+/home/angie/Documents/github/CPP-Project-Template/srcs/Application.cpp
+iostream
+-
+string
+-
+fstream
+-
+experimental/filesystem
+-
+algorithm
+-
+unistd.h
+/home/angie/Documents/github/CPP-Project-Template/srcs/unistd.h
+stdlib.h
+-
+Application.hpp
+/home/angie/Documents/github/CPP-Project-Template/srcs/Application.hpp
+
