@@ -1,3 +1,0 @@
-/home/angie/Documents/github/CPP-Project-Template/build/CMakeFiles/rebuild_cache.dir
-/home/angie/Documents/github/CPP-Project-Template/build/CMakeFiles/mysetup.dir
-/home/angie/Documents/github/CPP-Project-Template/build/CMakeFiles/edit_cache.dir

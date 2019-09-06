@@ -293,11 +293,11 @@ bool Application::getProjectType()
 {
 	std::string input;
 
-	std::cout << "\033[1;30;35mIs your project in C or C++ ? (c, c++): \033[0m";
+	std::cout << "\033[1;30;35mIs your project in C or CPP ? (c, cpp): \033[0m";
 	std::getline(std::cin, input);
 	if (input.empty())
 		printNoInputErrorMsg();
-	if (input[0] == 'c' and input[1] != '+')
+	if (input[0] == 'c' and input[1] != 'p')
 		return true;
 	return false;
 }
